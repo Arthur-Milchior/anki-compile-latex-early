@@ -132,7 +132,7 @@ def noteFlush(note, mod=None):
         someError = someError or error
     if someError:
         if note.hasTag("LaTeXError"):
-            tooltip("There was some LaTex compilation error.")
+            tooltip("Some LaTex compilation error remains.")
         else:
             note.addTag("LaTeXError")
             showWarning("There was some LaTex compilation error.")
