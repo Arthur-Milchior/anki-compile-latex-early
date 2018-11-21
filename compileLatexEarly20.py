@@ -51,13 +51,9 @@ from anki.notes import Note
 import re
 import unicodedata
 import anki.notes
-from aqt import mw
 import os
 from anki.latex import regexps, _latexFromHtml, build, _buildImg
 from anki.consts import *
-from anki.lang import _
-
-
 
 def mungeQA(html, type, fields, model, data, col):
     "Convert TEXT with embedded latex tags to image links. Returns the HTML and whether an error occurred."
@@ -154,12 +150,7 @@ def noteFlush(note, mod=None):
             tooltip("Some LaTex compilation error remains.")
         else:
             note.addTag("LaTeXError")
-            whichAlert=  mw.addonManager.getConfig(__name__).get("warningBox",True)
-            message = "There was some LaTex compilation error."
-            if whichAlert.lower() == "never":
-                tooltip(message)
-            else:
-                showWarning(message)
+            tooltip("There was some LaTex compilation error.")
     else:
         if note.hasTag("LaTeXError"):
             note.delTag("LaTeXError")
@@ -168,4 +159,3 @@ def noteFlush(note, mod=None):
       
   
 Note.flush = noteFlush
-#this is a test for update
