@@ -29,7 +29,7 @@ written, the image will always be generated.
 ## Warning
 The browser does not update when a tag is added/removed. Thus you may
 not trust the tag list in the browser to know whether your last edit
-created/removed a bug. 
+created/removed a bug.
 
 ### A problem when LaTeX header change
 If you change the footer/header, Anki will not recompile your LaTeX code. In
@@ -68,3 +68,4 @@ Based on    | Anki code by Damien Elmes <anki@ichi2.net>
 License     | GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 Source in   | https://github.com/Arthur-Milchior/anki-compile-latex-early/
 Addon number| [769835008](https://ankiweb.net/shared/info/769835008)
+Support me on| [![Ko-fi](https://ko-fi.com/img/Kofi_Logo_Blue.svg)](Ko-fi.com/arthurmilchior) or [![Patreon](http://www.milchior.fr/patreon.png)](https://www.patreon.com/bePatron?u=146206)
