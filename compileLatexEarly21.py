@@ -43,7 +43,7 @@ buggedLatex ={}
 
 def _imgLink(col, latex, model):
     """A pair containing:
-    An img link for LATEX, creating if necesssary. 
+    An img link for LATEX, creating if necesssary.
     Whether an error occurred."""
     txt = _latexFromHtml(col, latex)
     if txt in buggedLatex:
@@ -73,7 +73,7 @@ def _imgLink(col, latex, model):
 oldFlush = Note.flush
 def filesInStr(self, mid, string, note, mod, includeRemote=False):
     """The list of media's path in the string
-    
+
     Keyword arguments:
     self -- the media manager
     mid -- the id of the model of the note whose string is considered
@@ -102,7 +102,7 @@ def filesInStr(self, mid, string, note, mod, includeRemote=False):
                 isLocal = not re.match("(https?|ftp)://", fname.lower())
                 if isLocal or includeRemote:
                     l.append(fname)
-    return (l,someError)
+    return (l, someError)
 
 def noteFlush(note, mod=None):
     someError=False
@@ -125,7 +125,7 @@ def noteFlush(note, mod=None):
             note.delTag("LaTeXError")
             tooltip("There are no more LaTeX error.")
     oldFlush(note,mod=mod)
-      
-  
+
+
 Note.flush = noteFlush
 #this is a test for update
