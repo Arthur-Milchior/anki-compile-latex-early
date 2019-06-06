@@ -1,0 +1,9 @@
+This add-on repare three related problems with anki's compilation process for LaTeX.
+<ul>
+<li>Latex image are automatically generated without having to check media</li>
+<li>You are warned as soon as there is a latex error</li>
+<li>You can find notes with latex error, because they have a LaTeXError tag</li>
+</ul>
+
+
+For more information, please go to https://github.com/Arthur-Milchior/anki-compile-latex-early
