@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Compile latex during addedition and warn in case of error",
+  "properties": {
+    "warningBox": {
+      "type": "string",
+      "enum": ["Never", "On first error"],
+      "default": "On first error"
+    }
+  }
+}
