@@ -5,16 +5,18 @@
 # Add-on number: 769835008
 
 
-from anki.hooks import wrap
-from aqt.utils import tooltip, showWarning
-from anki.utils import checksum
-from anki.notes import Note
+import os
 import re
 import unicodedata
+
 import anki.notes
-import os
-from anki.latex import regexps, _latexFromHtml, build, _buildImg
 from anki.consts import *
+from anki.hooks import wrap
+from anki.latex import _buildImg, _latexFromHtml, build, regexps
+from anki.notes import Note
+from anki.utils import checksum
+from aqt.utils import showWarning, tooltip
+
 
 def mungeQA(html, type, fields, model, data, col):
     "Convert TEXT with embedded latex tags to image links. Returns the HTML and whether an error occurred."
@@ -36,7 +38,9 @@ def mungeQA(html, type, fields, model, data, col):
         error = error or er
     return html, error
 
-buggedLatex ={}
+
+buggedLatex = {}
+
 
 def _imgLink(col, latex, model):
     """A pair containing:
@@ -44,7 +48,7 @@ def _imgLink(col, latex, model):
     Whether an error occurred."""
     txt = _latexFromHtml(col, latex)
     if txt in buggedLatex:
-        return (buggedLatex[txt],True)
+        return (buggedLatex[txt], True)
     if model.get("latexsvg", False):
         ext = "svg"
     else:
@@ -54,23 +58,26 @@ def _imgLink(col, latex, model):
     fname = "latex-%s.%s" % (checksum(txt.encode("utf8")), ext)
     link = '<img class=latex src="%s">' % fname
     if os.path.exists(fname):
-        return (link,False)
+        return (link, False)
 
     # building disabled?
     if not build:
-        return ("[latex]%s[/latex]" % latex,False)
+        return ("[latex]%s[/latex]" % latex, False)
 
     err = _buildImg(col, txt, fname, model)
     if err:
-        buggedLatex[txt]=err
-        return (err,True)
+        buggedLatex[txt] = err
+        return (err, True)
     else:
-        return (link,False)
+        return (link, False)
+
 
 oldFlush = Note.flush
+
+
 def filesInStr(self, mid, string, note, mod, includeRemote=False):
     """The list of media's path in the string
-    
+
     Keyword arguments:
     self -- the media manager
     mid -- the id of the model of the note whose string is considered
@@ -90,7 +97,7 @@ def filesInStr(self, mid, string, note, mod, includeRemote=False):
         strings = [string]
     for string in strings:
         # handle latex
-        (string,error) = mungeQA(string, None, None, model, None, self.col)
+        (string, error) = mungeQA(string, None, None, model, None, self.col)
         someError = error or someError
         # extract filenames
         for reg in self.regexps:
@@ -99,12 +106,13 @@ def filesInStr(self, mid, string, note, mod, includeRemote=False):
                 isLocal = not re.match("(https?|ftp)://", fname.lower())
                 if isLocal or includeRemote:
                     l.append(fname)
-    return (l,someError)
+    return (l, someError)
+
 
 def noteFlush(note, mod=None):
-    someError=False
+    someError = False
     for field in note.fields:
-        (_,error)=filesInStr(note.col.media, note.mid,  field, note, mod)
+        (_, error) = filesInStr(note.col.media, note.mid,  field, note, mod)
         someError = someError or error
     if someError:
         if note.hasTag("LaTeXError"):
@@ -116,7 +124,7 @@ def noteFlush(note, mod=None):
         if note.hasTag("LaTeXError"):
             note.delTag("LaTeXError")
             tooltip("There are no more LaTeX error.")
-    oldFlush(note,mod=mod)
-      
-  
+    oldFlush(note, mod=mod)
+
+
 Note.flush = noteFlush
