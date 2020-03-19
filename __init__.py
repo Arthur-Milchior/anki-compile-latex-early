@@ -9,11 +9,12 @@ import re
 import unicodedata
 
 import anki.notes
+from anki import hooks
 from anki.consts import *
 from anki.hooks import wrap
 from anki.lang import _
-from anki.latex import _buildImg, _latexFromHtml, build, regexps
-from anki.notes import Note
+# _buildImg, _latexFromHtml, build, regexps
+from anki.latex import render_latex_returning_errors
 from anki.utils import checksum
 from aqt import mw
 from aqt.utils import showWarning, tooltip
@@ -73,9 +74,6 @@ def _imgLink(col, latex, model):
         return (link, False)
 
 
-oldFlush = Note.flush
-
-
 def filesInStr(self, mid, string, note, mod, includeRemote=False):
     """The list of media's path in the string
 
@@ -110,10 +108,12 @@ def filesInStr(self, mid, string, note, mod, includeRemote=False):
     return (l, someError)
 
 
-def noteFlush(note, mod=None):
+def noteFlush(note):
     someError = False
     for field in note.fields:
-        (_, error) = filesInStr(note.col.media, note.mid,  field, note, mod)
+        (_, error) = render_latex_returning_errors(field,
+                                                   note.col.models.get(note.mid), note.col, expand_clozes=True)
+        #filesInStr(note.col.media, note.mid,  field, note, mod)
         someError = someError or error
     if someError:
         if note.hasTag("LaTeXError"):
@@ -131,8 +131,6 @@ def noteFlush(note, mod=None):
         if note.hasTag("LaTeXError"):
             note.delTag("LaTeXError")
             tooltip("There are no more LaTeX error.")
-    oldFlush(note, mod=mod)
 
 
-Note.flush = noteFlush
-# this is a test for update
+hooks.note_will_flush.append(noteFlush)
